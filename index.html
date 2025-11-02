@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LAÇOS tela de login</title> 
+    
+    <link rel="manifest" href="manifest.json">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <style>
+        .login-frame { min-height: 100vh; display: flex; background-color: var(--fundo-branco); }
+        .login-ilustracao { width: 50%; background-color: var(--cor-secundaria); display: flex; justify-content: center; align-items: center; color: var(--fundo-branco); }
+        .login-form-area { width: 50%; display: flex; justify-content: center; align-items: center; padding: var(--margem-lateral); }
+        @media (max-width: 768px) {
+            .login-frame { flex-direction: column; }
+            .login-ilustracao, .login-form-area { width: 100%; min-height: 250px; }
+            .login-ilustracao { order: 1; } 
+            .login-form-area { order: 2; }
+        }
+        .error-message { color: #ef4444; font-size: 0.875rem; margin-top: 4px; height: 1.25rem; }
+        .input-error { border-color: #ef4444 !important; }
+    </style>
+</head>
+<body>
+<div class="login-frame">
+    <div class="login-ilustracao">
+        <h2>Bem-vindo ao Laços</h2>
+    </div>
+    <div class="login-form-area">
+        <div style="width: 100%; max-width: 350px;">
+            
+            <a href="index.html" class="logo-lacos" style="display: block; text-align: center; margin-bottom: 30px;">
+                <img src="img/logo.png" alt="Logomarca LAÇOS" style="height: 25vh;"> 
+            </a>
+            
+            <h1 class="text-link" style="text-align: center; margin-bottom: 30px;">Acesse sua conta</h1>
+            
+            <form>
+                <div style="margin-bottom: 15px;">
+                    <label class="text-secundario" style="display: block; margin-bottom: 5px;">E-mail</label>
+                    <input type="email" class="input-padrao" placeholder="seu.email@exemplo.com" id="email">
+                    <div id="error-email" class="error-message"></div>
+                </div>
+                <div style="margin-bottom: 20px;">
+                    <label class="text-secundario" style="display: block; margin-bottom: 5px;">Senha</label>
+                    <input type="password" class="input-padrao" placeholder="••••••••" id="senha">
+                    <div id="error-senha" class="error-message"></div>
+                </div>
+                <button type="submit" class="btn btn-primario" style="margin-bottom: 15px; width: 100%;">Entrar</button>
+            </form>
+
+            <p class="text-secundario" style="text-align: center; margin: 20px 0;">ou entre com</p>
+            
+            <div style="display: flex; gap: 15px;">
+                <button class="btn btn-social" style="flex-grow: 1;">
+                    <img src="icons/google.png" alt="Ícone Google" class="icon-inline">
+                </button>
+                <button class="btn btn-social" style="flex-grow: 1;">
+                    <img src="icons/apple.png" alt="Ícone Apple" class="icon-inline">
+                </button>
+            </div>
+            
+            <p class="text-secundario" style="text-align: center; margin-top: 20px;">
+                Não tem conta? <a href="cadastro.html" class="text-link">Cadastre-se</a>
+            </p>
+        </div>
+    </div>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, setPersistence, browserSessionPersistence } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyBFspeEITyz0L6gmBWgZISlTJU_FDN7H7s",
+        authDomain: "lacoscuidamais.firebaseapp.com",
+        projectId: "lacoscuidamais",
+        storageBucket: "lacoscuidamais.firebasestorage.app",
+        messagingSenderId: "756414982825",
+        appId: "1:756414982825:web:871b30376c9196c80d97b8",
+        measurementId: "G-0YG12ZBFGY"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    setPersistence(auth, browserSessionPersistence);
+
+    const loginForm = document.querySelector("form");
+
+    function setFieldError(fieldId, message) {
+        const field = document.getElementById(fieldId);
+        const errorEl = document.getElementById(`error-${fieldId}`);
+        if (message) {
+            field.classList.add('input-error');
+            errorEl.textContent = message;
+        } else {
+            field.classList.remove('input-error');
+            errorEl.textContent = '';
+        }
+    }
+
+    loginForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        setFieldError('email',''); setFieldError('senha','');
+
+        const email = document.getElementById('email').value.trim();
+        const senha = document.getElementById('senha').value.trim();
+
+        if (!email) { setFieldError('email','Informe seu e-mail'); return; }
+        if (!senha) { setFieldError('senha','Informe sua senha'); return; }
+
+        try {
+            const userCredential = await signInWithEmailAndPassword(auth, email, senha);
+            const uid = userCredential.user.uid;
+            const userDoc = await getDoc(doc(db,'usuarios',uid));
+            if (!userDoc.exists()) {
+                setFieldError('email','Usuário não encontrado.');
+                return;
+            }
+            const userData = userDoc.data();
+            if (userData.tipo === "cliente") window.location.href = "home_cliente.html";
+            else window.location.href = "dashboard_cuidador.html";
+        } catch(err) {
+            let msg = "Ocorreu um erro desconhecido. Tente novamente.";
+            if (err.code === "auth/wrong-password") msg = "Senha incorreta.";
+            if (err.code === "auth/user-not-found") msg = "Usuário não encontrado.";
+            setFieldError('email', msg);
+        }
+    });
+
+    // LOGIN COM GOOGLE
+   // Pegando o botão de forma segura
+const googleBtn = document.querySelectorAll(".btn-social")[0]; // primeiro botão social (Google)
+
+googleBtn.addEventListener("click", async () => {
+    const provider = new GoogleAuthProvider();
+    try {
+        const result = await signInWithPopup(auth, provider);
+        const user = result.user;
+        const uid = user.uid;
+        
+        const userRef = doc(db, 'usuarios', uid);
+        const userDoc = await getDoc(userRef);
+
+        let tipo = "cliente";
+        if (!userDoc.exists()) {
+            await setDoc(userRef, {
+                nome: user.displayName || '',
+                email: user.email,
+                tipo: tipo,
+                criadoEm: new Date(),
+                status: "ativo"
+            });
+        } else {
+            tipo = userDoc.data().tipo || "cliente";
+        }
+
+        // Redireciona de acordo com o tipo
+        if (tipo === "cliente") window.location.href = "home_cliente.html";
+        else window.location.href = "dashboard_cuidador.html";
+
+    } catch(err){
+        alert("Erro ao autenticar com Google. Tente novamente.");
+        console.error(err);
+    }
+});
+
+
+</script>
+
+<script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/service-worker.js')
+                .then(registration => console.log('SW registered!'))
+                .catch(err => console.log('SW registration failed: ', err));
+        });
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LAÇOS tela de dashboard</title> 
+    
+    <link rel="manifest" href="manifest.json">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    
+    <style>
+      
+    </style>
+</head>
+<body class="theme-cuidador">
+    <div class="layout-sidebar">
+    <nav class="sidebar">
+        <a href="dashboard_cuidador.html" class="item-menu ativo sidebar-menu-item" style="display: block;">Dashboard</a>
+        <a href="agenda_completa.html" class="item-menu sidebar-menu-item" style="display: block;">Agenda</a>
+        <a href="perfil_profissional.html" class="item-menu sidebar-menu-item" style="display: block;">Meu Perfil</a>
+        <a href="historico_pagamentos.html" class="item-menu sidebar-menu-item" style="display: block;">Pagamentos</a>
+    </nav>
+    
+    <main class="main-content">
+        <h1 style="margin-bottom: 20px;">Dashboard</h1>
+        
+        <div class="grid">
+            <div class="col-8 col-lg-12">
+                <h2 style="margin-bottom: 15px;">Solicitações Pendentes (2)</h2>
+                <div class="card" style="margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+                    <div>
+                        <p style="font-weight: 600;">Cliente: João P.</p>
+                        <p class="text-secundario">Data: 28/10 | Horário: 14:00 - 16:00</p>
+                    </div>
+                    <div style="display: flex; gap: 10px; margin-top: 10px;">
+                        <button class="btn btn-acao-aceitar" style="padding: 8px 16px;">Aceitar</button>
+                        <button class="btn btn-acao-recusar" style="padding: 8px 16px;">Recusar</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-4 col-lg-12">
+                <div class="card" style="position: sticky; top: 20px;">
+                    <h2 style="margin-bottom: 15px;">Próximos Atendimentos</h2>
+                    <ul style="list-style: none;">
+                        <li style="margin-bottom: 10px; border-left: 3px solid var(--cor-secundaria); padding-left: 10px;">
+                            <p style="font-weight: 600;">24/10 (Amanhã)</p>
+                            <p class="text-secundario">Sofia L. (08:30)</p>
+                        </li>
+                    </ul>
+                    <a href="agenda_completa.html" class="text-link" style="font-size: var(--texto-menor);">Ver agenda completa</a>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+<footer class="nav-mobile-footer">
+    <div class="nav-mobile-container">
+        <a href="dashboard_cuidador.html" class="nav-item-mobile ativo">
+            <img src="icons/dashboard.svg" alt="Dashboard" class="nav-item-mobile-icon">
+            Dashboard
+        </a>
+        <a href="agenda_completa.html" class="nav-item-mobile">
+            <img src="icons/calendar.svg" alt="Agenda" class="nav-item-mobile-icon">
+            Agenda
+        </a>
+        <a href="historico_pagamentos.html" class="nav-item-mobile">
+            <img src="icons/money.svg" alt="Pagamentos" class="nav-item-mobile-icon">
+            Pagamentos
+        </a>
+        <a href="perfil_profissional.html" class="nav-item-mobile">
+            <img src="icons/person.svg" alt="Meu Perfil" class="nav-item-mobile-icon">
+            Meu Perfil
+        </a>
+    </div>
+</footer>
+<script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(registration => console.log('SW registered!'))
+                    .catch(registrationError => console.log('SW registration failed: ', registrationError));
+            });
+        }
+    </script>
+</body>
+</html>

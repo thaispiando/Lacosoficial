@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LAÇOS tela de pagamento</title> 
+    
+    <link rel="manifest" href="manifest.json">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    
+    <style>
+      
+    </style>
+</head>
+<body>
+    <main class="container" style="padding: 40px; text-align: center;">
+    <div style="max-width: 600px; margin: 0 auto;">
+        <h1 class="text-link" style="margin-bottom: 30px;">O serviço foi concluído?</h1>
+        <p style="font-weight: 600; margin-bottom: 40px;">Confirme a conclusão para liberar o pagamento ao Cuidador.</p>
+
+        <div style="display: flex; justify-content: center; gap: 20px; margin-bottom: 40px;">
+            <a href="home_cliente.html" class="btn btn-acao-aceitar" style="width: 200px;">Sim, Concluído!</a>
+            <button class="btn btn-acao-recusar" style="width: 200px; background-color: var(--texto-secundario);">Ainda não</button>
+        </div>
+
+        <h2 style="margin-top: 40px; margin-bottom: 15px;">Avalie o Cuidador</h2>
+        <div style="font-size: 40px; color: var(--cor-avaliacao); cursor: pointer; margin-bottom: 20px;">
+            ⭐⭐⭐⭐⭐
+        </div>
+
+        <textarea class="input-padrao" rows="5" placeholder="Deixe seu comentário sobre a experiência..." style="margin-bottom: 20px;"></textarea>
+        
+        <a href="home_cliente.html" class="btn btn-primario" style="width: 250px;">Enviar avaliação e Voltar</a>
+    </div>
+</main>
+<footer class="nav-mobile-footer">
+    <div class="nav-mobile-container">
+        <a href="home_cliente.html" class="nav-item-mobile ativo">
+            <img src="icons/search.png" alt="Home" class="nav-item-mobile-icon">
+            Buscar
+        </a>
+        <a href="perfil_cliente.html" class="nav-item-mobile">
+            <img src="icons/calendar.svg" alt="Agendamentos" class="nav-item-mobile-icon">
+            Agendamentos
+        </a>
+        <a href="perfil_cliente.html" class="nav-item-mobile">
+            <img src="icons/user_profile.svg" alt="Perfil" class="nav-item-mobile-icon">
+            Perfil
+        </a>
+    </div>
+</footer>
+<script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(registration => console.log('SW registered!'))
+                    .catch(registrationError => console.log('SW registration failed: ', registrationError));
+            });
+        }
+    </script>
+</body>
+</html>

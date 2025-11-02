@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LAÇOS - Home Cliente</title>
+    <!-- Tailwind CSS CDN --><script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Inter --><link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Configuração do Tailwind para cores personalizadas e fontes */
+        :root {
+            --color-primary: #5a7dbe; /* Azul principal mais escuro */
+            --color-secondary: #8cadda; /* Azul mais claro para fundo/cards */
+            --color-text-dark: #1f2937;
+            --color-text-light: #4b5563;
+            --color-star: #fbbf24; /* Amarelo das estrelas */
+        }
+
+        /* Aplica as cores personalizadas do CSS para o Tailwind */
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: 'var(--color-primary)',
+                        secondary: 'var(--color-secondary)',
+                        textdark: 'var(--color-text-dark)',
+                        textlight: 'var(--color-text-light)',
+                        star: 'var(--color-star)',
+                        backgroundlight: '#f5f7fa', /* Um cinza bem clarinho para o fundo do main, mais neutro */
+                        headerblue: '#7da2d9', /* Azul médio para o header */
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+
+        /* Estilos base para o corpo da página */
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            color: var(--color-text-dark);
+            background-color: var(--backgroundlight); 
+        }
+
+        /* Cabeçalho principal com gradiente */
+        .header-bg {
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+            border-bottom-left-radius: 30px;
+            border-bottom-right-radius: 30px;
+            padding-bottom: 30px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        /* Campo de busca estilizado */
+        .search-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 1.5rem auto 0.75rem auto;
+            z-index: 10;
+        }
+
+        /* Botões de filtro rápido */
+        .quick-filter-btn {
+            background-color: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            color: white;
+            font-weight: 500;
+            border-radius: 12px;
+            padding: 0.75rem 0.5rem;
+            text-align: center;
+            font-size: 0.875rem;
+            transition: all 0.2s ease-in-out;
+        }
+        .quick-filter-btn:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Botões de categoria */
+        .category-button {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            transition: all 0.2s ease-in-out;
+            padding: 1rem;
+        }
+        .category-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .category-icon {
+            color: var(--color-primary);
+            width: 32px;
+            height: 32px;
+        }
+
+        /* Cards de cuidadores disponíveis */
+        .caregiver-card {
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transition: all 0.2s ease-in-out;
+            padding: 1.25rem;
+        }
+        .caregiver-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+        }
+        .caregiver-avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--color-secondary);
+            flex-shrink: 0;
+        }
+        .star-icon {
+            color: var(--color-star);
+        }
+
+        /* Navbar inferior */
+        .bottom-nav {
+            background-color: white;
+            box-shadow: 0 -6px 15px rgba(0, 0, 0, 0.1);
+            padding-top: 0.75rem;
+            padding-bottom: env(safe-area-inset-bottom, 0.75rem);
+        }
+        .bottom-nav-item {
+            color: #9ca3af;
+            transition: all 0.2s ease-in-out;
+        }
+        .bottom-nav-item.active {
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+        .bottom-nav-item:hover:not(.active) {
+            color: var(--color-primary);
+        }
+        .bottom-nav-icon {
+            width: 24px;
+            height: 24px;
+        }
+        
+        /* Estilização do range slider */
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--color-primary);
+            cursor: pointer;
+            box-shadow: 0 0 2px rgba(0,0,0,0.3);
+        }
+        input[type=range]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--color-primary);
+            cursor: pointer;
+            box-shadow: 0 0 2px rgba(0,0,0,0.3);
+            border: none;
+        }
+
+        /* Estilo do container do mapa simulado */
+        .map-container {
+            height: 200px;
+            background: url("https://placehold.co/600x200/5a7dbe/ffffff?text=Simulação+de+Mapa") no-repeat center center;
+            background-size: cover;
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
+            margin-bottom: 1rem;
+        }
+        .map-marker {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background-color: white;
+            border: 2px solid var(--color-primary);
+            border-radius: 50% 50% 50% 0;
+            transform: rotate(-45deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        .map-marker::after {
+            content: ' ';
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: var(--color-primary);
+            border-radius: 50%;
+            transform: rotate(45deg);
+        }
+        .marker-1 { top: 30px; left: 20%; }
+        .marker-2 { top: 80px; left: 70%; }
+        .marker-3 { top: 150px; left: 45%; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- Cabeçalho Principal --><header class="header-bg pt-6 md:pt-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Barra superior: Perfil e Toggle --><div class="flex justify-between items-center mb-6">
+                <div class="flex items-center space-x-3">
+                    <img src="https://placehold.co/40x40/8cadda/ffffff?text=DS" alt="Daniel Silva" class="w-10 h-10 rounded-full border-2 border-white">
+                    <div>
+                        <div class="text-white text-lg font-semibold">Daniel Silva</div>
+                        <span class="text-white text-sm opacity-80">Cliente - Paciente</span>
+                    </div>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" value="" class="sr-only peer">
+                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                    <span class="ml-2 text-sm font-medium text-white opacity-80">
+                        <!-- Icone de olho --><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                    </span>
+                </label>
+            </div>
+
+            <!-- Campo de Busca Principal --><div class="search-container">
+                <div class="flex items-center bg-white rounded-xl shadow-lg h-12 overflow-hidden w-full">
+                    <div class="pl-4 flex-shrink-0 text-gray-400">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    </div>
+                    <input type="search" placeholder="Buscar cuidador por nome ou especialidade" class="flex-grow h-full px-4 border-none focus:ring-0 outline-none text-base rounded-r-xl">
+                </div>
+            </div>
+            
+            <!-- Botões de Filtro Rápido (CHAMAM MODAIS ESPECÍFICOS) -->
+            <div class="flex justify-between space-x-2 mt-4 pb-2">
+                <button onclick="openLocationModal()" class="quick-filter-btn w-1/4">Localização</button>
+                <button onclick="openDateModal()" class="quick-filter-btn w-1/4">Data</button>
+                <button onclick="openGenderModal()" class="quick-filter-btn w-1/4">Gênero</button>
+                <button onclick="openRatingModal()" class="quick-filter-btn w-1/4">Avaliação</button>
+            </div>
+            
+        </div>
+    </header>
+
+    <!-- Conteúdo Principal --><main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-20">
+        <div class="h-4 sm:h-6"></div> 
+        
+        <!-- Categorias --><section class="mb-8">
+            <h2 class="text-xl font-bold text-textdark mb-4">Categorias</h2>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-4">
+                <!-- Cuidadores --><a href="#" class="category-button text-center flex flex-col items-center justify-center">
+                    <svg class="category-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h-5m-5 0h10a2 2 0 002-2V7a2 2 0 00-2-2h-3m-5 0v10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h3zm0 0a2 2 0 100-4 2 2 0 000 4zM9 11h4a2 2 0 012 2v1m-4 4l-4-4m4 4l4-4"></path></svg>
+                    <span class="text-sm font-medium text-textlight mt-2">Cuidadores</span>
+                </a>
+                <!-- Suporte --><a href="#" class="category-button text-center flex flex-col items-center justify-center">
+                    <svg class="category-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 0a3 3 0 10-4.243 4.243L18.364 5.636zM9.172 16.828L5.636 20.364m0 0a3 3 0 104.243-4.243L9.172 16.828zM14.828 7.172L20.364 1.636m0 0a3 3 0 10-4.243-4.243L14.828 7.172zM16.828 9.172L1.636 20.364m0 0a3 3 0 104.243-4.243L16.828 9.172z"></path></svg>
+                    <span class="text-sm font-medium text-textlight mt-2">Suporte</span>
+                </a>
+                <!-- Calendário --><a href="#" class="category-button text-center flex flex-col items-center justify-center">
+                    <svg class="category-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-4 4V3m-4 14h10m-4-7h4m-4-7h4m-4 14h10m-4-7h4m-4 14h10m-4-7h4M5 11h14a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2v-9a2 2 0 012-2z"></path></svg>
+                    <span class="text-sm font-medium text-textlight mt-2">Calendário</span>
+                </a>
+                <!-- Histórico --><a href="#" class="category-button text-center flex flex-col items-center justify-center">
+                    <svg class="category-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+                    <span class="text-sm font-medium text-textlight mt-2">Histórico</span>
+                </a>
+                <!-- Solicitações --><a href="#" class="category-button text-center flex flex-col items-center justify-center">
+                    <svg class="category-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                    <span class="text-sm font-medium text-textlight mt-2">Solicitações</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- Cuidadores Disponíveis --><section>
+            <h2 class="text-xl font-bold text-textdark mb-4">Cuidadores Disponíveis</h2>
+            <!-- Container que será preenchido pelo JavaScript --><div id="caregiversList" class="space-y-4">
+                <p class="text-center text-gray-500 py-8">Carregando cuidadores...</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Barra de Navegação Inferior (Fixed) --><nav class="bottom-nav fixed bottom-0 left-0 right-0 p-4 border-t border-gray-100 flex justify-around items-center z-20">
+        <a href="#" class="bottom-nav-item flex flex-col items-center">
+            <svg class="bottom-nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m0 0l-7 7-7-7m2-2v10a1 1 0 001 1h3m10-11l2 2m0 0l-7 7-7-7m2-2v10a1 1 0 001 1h3"></path></svg>
+            <span class="text-xs mt-1">Início</span>
+        </a>
+        <a href="#" class="bottom-nav-item active flex flex-col items-center">
+            <svg class="bottom-nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+            <span class="text-xs mt-1">Cuidadores</span>
+        </a>
+        <a href="#" class="bottom-nav-item flex flex-col items-center">
+            <svg class="bottom-nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-4 4V3m-4 14h10m-4-7h4m-4-7h4m-4 14h10m-4-7h4m-4 14h10m-4-7h4M5 11h14a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2v-9a2 2 0 012-2z"></path></svg>
+            <span class="text-xs mt-1">Calendário</span>
+        </a>
+        <a href="#" class="bottom-nav-item flex flex-col items-center">
+            <svg class="bottom-nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+            <span class="text-xs mt-1">Perfil</span>
+        </a>
+    </nav>
+    
+    <!-- ************************************ -->
+    <!-- MODAIS ESPECÍFICOS PARA CADA FILTRO -->
+    <!-- ************************************ -->
+
+    <!-- Modal de Localização (Com Mapa Simulado) --><div id="locationModal" class="modal-overlay hidden fixed inset-0 z-50 overflow-y-auto">
+        <div class="fixed inset-0 bg-black bg-opacity-50 transition-opacity" onclick="closeModal('locationModal')"></div>
+        <div class="modal-panel absolute bottom-0 left-0 right-0 max-h-[90%] bg-backgroundlight rounded-t-3xl shadow-2xl p-6 transition-transform duration-300 ease-out transform translate-y-full">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-bold text-textdark">Filtrar por Localização</h2>
+                <button onclick="closeModal('locationModal')" class="text-gray-500 hover:text-gray-700 p-2 rounded-full transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            
+            <label for="filterLocationInput" class="block text-sm font-medium text-textlight mb-2">Digite o endereço, bairro ou CEP</label>
+            <input type="text" id="filterLocationInput" placeholder="Ex: Av. Paulista, 1000" class="w-full p-3 border border-gray-300 rounded-xl focus:border-primary focus:ring-primary transition-colors mb-4">
+
+            <!-- Simulação de Mapa -->
+            <div class="map-container relative">
+                <div class="map-marker marker-1" title="Cuidador 1"></div>
+                <div class="map-marker marker-2" title="Cuidador 2"></div>
+                <div class="map-marker marker-3" title="Cuidador 3"></div>
+                <div class="absolute bottom-2 right-2 bg-white text-primary text-xs px-2 py-1 rounded-lg shadow-md font-semibold">📍 Seu Local Atual</div>
+            </div>
+
+            <h3 class="text-lg font-semibold text-textdark my-4">Cuidadores Próximos (Simulação)</h3>
+            <div id="nearbyCaregiversList" class="max-h-48 overflow-y-auto space-y-3 p-1">
+                <!-- Conteúdo dinâmico será injetado aqui -->
+            </div>
+
+            <div class="flex justify-end space-x-4 mt-8">
+                <button onclick="clearLocationFilter()" type="button" class="py-3 bg-gray-200 text-textdark font-semibold rounded-xl hover:bg-gray-300 transition-colors px-6">Limpar</button>
+                <button onclick="applyLocationFilter()" type="button" class="py-3 bg-primary text-white font-semibold rounded-xl hover:bg-opacity-90 transition-colors px-6">Aplicar Localização</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Data -->
+    <div id="dateModal" class="modal-overlay hidden fixed inset-0 z-50 overflow-y-auto">
+        <div class="fixed inset-0 bg-black bg-opacity-50 transition-opacity" onclick="closeModal('dateModal')"></div>
+        <div class="modal-panel absolute bottom-0 left-0 right-0 max-h-[90%] bg-backgroundlight rounded-t-3xl shadow-2xl p-6 transition-transform duration-300 ease-out transform translate-y-full">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-textdark">Filtrar por Data</h2>
+                <button onclick="closeModal('dateModal')" class="text-gray-500 hover:text-gray-700 p-2 rounded-full transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            
+            <label for="filterDateInput" class="block text-sm font-medium text-textlight mb-2">Selecione a Data do Serviço</label>
+            <input type="date" id="filterDateInput" class="w-full p-3 border border-gray-300 rounded-xl focus:border-primary focus:ring-primary transition-colors mb-8">
+
+            <div class="flex justify-end space-x-4 mt-8">
+                <button onclick="clearDateFilter()" type="button" class="py-3 bg-gray-200 text-textdark font-semibold rounded-xl hover:bg-gray-300 transition-colors px-6">Limpar</button>
+                <button onclick="applyDateFilter()" type="button" class="py-3 bg-primary text-white font-semibold rounded-xl hover:bg-opacity-90 transition-colors px-6">Aplicar Data</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Gênero -->
+    <div id="genderModal" class="modal-overlay hidden fixed inset-0 z-50 overflow-y-auto">
+        <div class="fixed inset-0 bg-black bg-opacity-50 transition-opacity" onclick="closeModal('genderModal')"></div>
+        <div class="modal-panel absolute bottom-0 left-0 right-0 max-h-[90%] bg-backgroundlight rounded-t-3xl shadow-2xl p-6 transition-transform duration-300 ease-out transform translate-y-full">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-textdark">Filtrar por Gênero</h2>
+                <button onclick="closeModal('genderModal')" class="text-gray-500 hover:text-gray-700 p-2 rounded-full transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+
+            <label class="block text-sm font-medium text-textlight mb-4">Escolha o Gênero do Cuidador</label>
+            <div class="flex flex-col space-y-3">
+                <label class="flex items-center space-x-3 text-textdark p-3 bg-white rounded-xl shadow-sm hover:bg-gray-50 transition-colors">
+                    <input type="radio" name="filterGender" value="Feminino" class="text-primary focus:ring-primary w-5 h-5">
+                    <span class="text-base font-medium">Feminino</span>
+                </label>
+                <label class="flex items-center space-x-3 text-textdark p-3 bg-white rounded-xl shadow-sm hover:bg-gray-50 transition-colors">
+                    <input type="radio" name="filterGender" value="Masculino" class="text-primary focus:ring-primary w-5 h-5">
+                    <span class="text-base font-medium">Masculino</span>
+                </label>
+                <label class="flex items-center space-x-3 text-textdark p-3 bg-white rounded-xl shadow-sm hover:bg-gray-50 transition-colors">
+                    <input type="radio" name="filterGender" value="Todos" class="text-primary focus:ring-primary w-5 h-5">
+                    <span class="text-base font-medium">Qualquer Gênero</span>
+                </label>
+            </div>
+
+            <div class="flex justify-end space-x-4 mt-8">
+                <button onclick="clearGenderFilter()" type="button" class="py-3 bg-gray-200 text-textdark font-semibold rounded-xl hover:bg-gray-300 transition-colors px-6">Limpar</button>
+                <button onclick="applyGenderFilter()" type="button" class="py-3 bg-primary text-white font-semibold rounded-xl hover:bg-opacity-90 transition-colors px-6">Aplicar Gênero</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Avaliação -->
+    <div id="ratingModal" class="modal-overlay hidden fixed inset-0 z-50 overflow-y-auto">
+        <div class="fixed inset-0 bg-black bg-opacity-50 transition-opacity" onclick="closeModal('ratingModal')"></div>
+        <div class="modal-panel absolute bottom-0 left-0 right-0 max-h-[90%] bg-backgroundlight rounded-t-3xl shadow-2xl p-6 transition-transform duration-300 ease-out transform translate-y-full">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-textdark">Filtrar por Avaliação</h2>
+                <button onclick="closeModal('ratingModal')" class="text-gray-500 hover:text-gray-700 p-2 rounded-full transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+
+            <label for="filterRatingInput" class="block text-sm font-medium text-textlight mb-2">Avaliação Mínima Necessária</label>
+            <div class="flex items-center space-x-4 bg-white p-4 rounded-xl shadow-sm border border-gray-200">
+                <input type="range" id="filterRatingInput" min="3.0" max="5.0" step="0.1" value="4.0" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                <span id="ratingValue" class="text-2xl font-bold text-primary w-16 text-right">4.0 ⭐</span>
+            </div>
+
+            <div class="flex justify-end space-x-4 mt-8">
+                <button onclick="clearRatingFilter()" type="button" class="py-3 bg-gray-200 text-textdark font-semibold rounded-xl hover:bg-gray-300 transition-colors px-6">Limpar</button>
+                <button onclick="applyRatingFilter()" type="button" class="py-3 bg-primary text-white font-semibold rounded-xl hover:bg-opacity-90 transition-colors px-6">Aplicar Avaliação</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Service Worker para PWA (Mantido) --><script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(registration => console.log('SW registered!'))
+                    .catch(registrationError => console.log('SW registration failed: ', registrationError));
+            });
+        }
+    </script>
+    
+    <!-- Script para Lógica Principal e Filtros --><script>
+        // --- DADOS MOCK (SIMULAÇÃO) ---
+        const allCaregivers = [
+            { id: 1, name: "Olivia Rosário", profession: "Fisioterapeuta", rating: 4.9, reviews: 19, gender: "Feminino", location: "Centro", availableDates: [1, 5, 8, 15, 22], img: "https://placehold.co/70x70/8cadda/ffffff?text=O" },
+            { id: 2, name: "Jonathan Patterson", profession: "Acompanhante", rating: 4.5, reviews: 57, gender: "Masculino", location: "Pinheiros", availableDates: [2, 6, 9, 16, 23], img: "https://placehold.co/70x70/5a7dbe/ffffff?text=J" },
+            { id: 3, name: "Maria Clara Souza", profession: "Enfermeira", rating: 5.0, reviews: 120, gender: "Feminino", location: "Brooklin", availableDates: [3, 7, 10, 17, 24], img: "https://placehold.co/70x70/8cadda/ffffff?text=M" },
+            { id: 4, name: "Roberto Alves", profession: "Técnico de Enfermagem", rating: 4.2, reviews: 8, gender: "Masculino", location: "Tatuapé", availableDates: [4, 8, 11, 18, 25], img: "https://placehold.co/70x70/5a7dbe/ffffff?text=R" },
+            { id: 5, name: "Carolina Lima", profession: "Fisioterapeuta", rating: 4.8, reviews: 30, gender: "Feminino", location: "Vila Mariana", availableDates: [1, 6, 12, 19, 26], img: "https://placehold.co/70x70/8cadda/ffffff?text=C" },
+            { id: 6, name: "Ricardo Santos", profession: "Acompanhante", rating: 3.8, reviews: 15, gender: "Masculino", location: "Mooca", availableDates: [2, 7, 13, 20, 27], img: "https://placehold.co/70x70/5a7dbe/ffffff?text=R" },
+        ];
+
+        let currentFilters = {
+            location: null,
+            date: null, // Dia do mês (1-31)
+            gender: null,
+            rating: 3.0 // Avaliação mínima padrão
+        };
+
+        // --- FUNÇÕES DE UTILIDADE ---
+
+        function alertAppMessage(message) {
+            console.log('APP ALERT:', message);
+            const existingAlert = document.getElementById('appAlert');
+            if(existingAlert) existingAlert.remove();
+
+            const alertDiv = document.createElement('div');
+            alertDiv.id = 'appAlert';
+            alertDiv.className = 'fixed top-4 left-1/2 transform -translate-x-1/2 bg-primary text-white px-4 py-3 rounded-xl shadow-lg z-[100] transition-opacity duration-300 opacity-0';
+            alertDiv.textContent = message;
+            document.body.appendChild(alertDiv);
+
+            setTimeout(() => { alertDiv.classList.add('opacity-100'); }, 10);
+            setTimeout(() => {
+                alertDiv.classList.remove('opacity-100');
+                setTimeout(() => { alertDiv.remove(); }, 300);
+            }, 3000);
+        }
+
+        // Função para abrir qualquer modal
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            const panel = modal.querySelector('.modal-panel');
+            modal.classList.remove('hidden');
+            setTimeout(() => { panel.classList.remove('translate-y-full'); }, 10);
+
+            // Se for o modal de localização, preenche a lista lateral (mockup)
+            if (modalId === 'locationModal') {
+                renderNearbyCaregivers();
+            }
+        }
+
+        // Função para fechar qualquer modal
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            const panel = modal.querySelector('.modal-panel');
+            panel.classList.add('translate-y-full');
+            setTimeout(() => { modal.classList.add('hidden'); }, 300);
+        }
+        
+        // --- RENDERIZAÇÃO E FILTRAGEM PRINCIPAL ---
+
+        function renderCaregivers(filters) {
+            const listContainer = document.getElementById('caregiversList');
+            let filtered = [...allCaregivers];
+
+            // 1. Filtrar por Avaliação
+            if (filters.rating > 3.0) {
+                 filtered = filtered.filter(c => c.rating >= filters.rating);
+            }
+
+            // 2. Filtrar por Gênero
+            if (filters.gender && filters.gender !== 'Todos') {
+                filtered = filtered.filter(c => c.gender === filters.gender);
+            }
+
+            // 3. Filtrar por Data (Dia do mês)
+            if (filters.date) {
+                const dayOfMonth = new Date(filters.date).getDate();
+                filtered = filtered.filter(c => c.availableDates.includes(dayOfMonth));
+            }
+
+            // 4. Filtrar por Localização (Simulação: match parcial com a cidade)
+             if (filters.location) {
+                const searchLocation = filters.location.toLowerCase();
+                filtered = filtered.filter(c => c.location.toLowerCase().includes(searchLocation));
+            }
+
+
+            // Limpa o container e renderiza
+            listContainer.innerHTML = '';
+
+            if (filtered.length === 0) {
+                listContainer.innerHTML = '<p class="text-center text-gray-500 py-8">Nenhum cuidador encontrado com os filtros aplicados.</p>';
+                return;
+            }
+
+            filtered.forEach(caregiver => {
+                const cardHtml = `
+                    <div class="caregiver-card flex items-center p-4">
+                        <img src="${caregiver.img}" alt="${caregiver.name}" class="caregiver-avatar mr-4">
+                        <div class="flex-grow">
+                            <p class="text-lg font-semibold text-textdark">${caregiver.name}</p>
+                            <p class="text-sm text-textlight">${caregiver.profession} - ${caregiver.location}</p>
+                            <div class="flex items-center text-sm mt-1">
+                                <span class="star-icon mr-1">⭐</span>
+                                <span class="font-medium">${caregiver.rating.toFixed(1)}</span>
+                                <span class="text-textlight ml-1">(${caregiver.reviews} Reviews)</span>
+                            </div>
+                        </div>
+                        <button class="bg-primary text-white p-2 rounded-full hover:bg-opacity-90 transition-opacity flex-shrink-0">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        </button>
+                    </div>
+                `;
+                listContainer.insertAdjacentHTML('beforeend', cardHtml);
+            });
+            
+            // Log do resultado da filtragem
+            console.log(`Cuidadores renderizados: ${filtered.length}. Filtros atuais:`, filters);
+        }
+
+        function renderNearbyCaregivers() {
+            const listContainer = document.getElementById('nearbyCaregiversList');
+            listContainer.innerHTML = '';
+            
+            // Simulação: Apenas os 3 primeiros cuidadores para a lista de "Próximos"
+            allCaregivers.slice(0, 3).forEach(c => {
+                const itemHtml = `
+                    <div class="flex justify-between items-center p-2 bg-white rounded-lg border border-gray-100 shadow-sm text-sm">
+                        <span>${c.name} (${c.location})</span>
+                        <span class="text-xs font-semibold text-primary">${c.rating.toFixed(1)} ⭐</span>
+                    </div>
+                `;
+                listContainer.insertAdjacentHTML('beforeend', itemHtml);
+            });
+        }
+
+
+        // --- FUNÇÕES DE ABERTURA DE MODAL ---
+
+        function openLocationModal() {
+            // Inicializa o input com o valor atual do filtro, se houver
+            document.getElementById('filterLocationInput').value = currentFilters.location || '';
+            openModal('locationModal');
+        }
+
+        function openDateModal() {
+            document.getElementById('filterDateInput').value = currentFilters.date || '';
+            openModal('dateModal');
+        }
+        
+        function openGenderModal() {
+            document.querySelectorAll(`input[name="filterGender"]`).forEach(radio => {
+                if (radio.value === (currentFilters.gender || 'Todos')) {
+                    radio.checked = true;
+                } else {
+                    radio.checked = false;
+                }
+            });
+            openModal('genderModal');
+        }
+
+        function openRatingModal() {
+            const ratingInput = document.getElementById('filterRatingInput');
+            const ratingValueSpan = document.getElementById('ratingValue');
+            
+            ratingInput.value = currentFilters.rating.toFixed(1);
+            ratingValueSpan.textContent = currentFilters.rating.toFixed(1) + ' ⭐';
+
+            // Atualiza o valor do range slider ao abrir
+            ratingInput.oninput = (event) => {
+                ratingValueSpan.textContent = parseFloat(event.target.value).toFixed(1) + ' ⭐';
+            };
+
+            openModal('ratingModal');
+        }
+        
+        // --- FUNÇÕES DE APLICAÇÃO DE FILTRO ---
+
+        function applyLocationFilter() {
+            const location = document.getElementById('filterLocationInput').value.trim();
+            currentFilters.location = location.toLowerCase();
+            renderCaregivers(currentFilters);
+            alertAppMessage(`Filtro Localização aplicado: ${location || 'Nenhum'}`);
+            closeModal('locationModal');
+        }
+
+        function applyDateFilter() {
+            const date = document.getElementById('filterDateInput').value;
+            currentFilters.date = date; 
+            renderCaregivers(currentFilters);
+            alertAppMessage(`Filtro Data aplicado: ${date ? new Date(date).toLocaleDateString() : 'Nenhuma'}`);
+            closeModal('dateModal');
+        }
+
+        function applyGenderFilter() {
+            const gender = document.querySelector('input[name="filterGender"]:checked')?.value || 'Todos';
+            currentFilters.gender = gender === 'Todos' ? null : gender;
+            renderCaregivers(currentFilters);
+            alertAppMessage(`Filtro Gênero aplicado: ${gender}`);
+            closeModal('genderModal');
+        }
+
+        function applyRatingFilter() {
+            const rating = parseFloat(document.getElementById('filterRatingInput').value);
+            currentFilters.rating = rating;
+            renderCaregivers(currentFilters);
+            alertAppMessage(`Filtro Avaliação aplicado: ${rating.toFixed(1)} estrelas`);
+            closeModal('ratingModal');
+        }
+
+        // --- FUNÇÕES DE LIMPEZA DE FILTRO ---
+
+        function clearLocationFilter() {
+            document.getElementById('filterLocationInput').value = '';
+            currentFilters.location = null;
+            renderCaregivers(currentFilters);
+            alertAppMessage('Filtro Localização limpo.');
+            closeModal('locationModal');
+        }
+
+        function clearDateFilter() {
+            document.getElementById('filterDateInput').value = '';
+            currentFilters.date = null;
+            renderCaregivers(currentFilters);
+            alertAppMessage('Filtro Data limpo.');
+            closeModal('dateModal');
+        }
+
+        function clearGenderFilter() {
+            document.querySelectorAll('input[name="filterGender"]').forEach(radio => radio.checked = false);
+            currentFilters.gender = null;
+            renderCaregivers(currentFilters);
+            alertAppMessage('Filtro Gênero limpo.');
+            closeModal('genderModal');
+        }
+
+        function clearRatingFilter() {
+            const ratingInput = document.getElementById('filterRatingInput');
+            const ratingValueSpan = document.getElementById('ratingValue');
+            ratingInput.value = '3.0'; // Valor mínimo
+            currentFilters.rating = 3.0;
+            ratingValueSpan.textContent = '3.0 ⭐';
+            renderCaregivers(currentFilters);
+            alertAppMessage('Filtro Avaliação limpo (min. 3.0).');
+            closeModal('ratingModal');
+        }
+        
+        
+        // --- INICIALIZAÇÃO ---
+        document.addEventListener('DOMContentLoaded', () => {
+             // Renderiza a lista inicial ao carregar a página
+             renderCaregivers(currentFilters);
+        });
+
+    </script>
+    
+</body>
+</html>

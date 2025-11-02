@@ -1,0 +1,455 @@
+/* =======================================
+   LAÇOS - Design System & Layout (style.css)
+   ======================================= */
+:root {
+    /* Cores */
+    --cor-primaria: #2563EB;
+    --cor-secundaria: #10B981;
+    --fundo-claro: #F3F4F6;
+    --fundo-branco: #FFFFFF;
+    --texto-principal: #111827;
+    --texto-secundario: #6B7280;
+    --cor-avaliacao: #FACC15;
+    --cor-erro: #EF4444; 
+    --cor-sucesso: var(--cor-secundaria); 
+
+    /* Tipografia */
+    --fonte-principal: 'Inter', sans-serif;
+    --titulo-principal: 32px; /* peso 700 */
+    --subtitulo: 20px; /* peso 600 */
+    --texto-padrao: 16px; /* peso 400 */
+    --texto-menor: 14px; /* peso 400 */
+
+    /* Grid Responsivo (1280px) */
+    --largura-maxima: 1280px;
+    --margem-lateral: 40px;
+    --gutter: 24px;
+    --raio-borda: 12px;
+}
+
+/* Reset Básico */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--fonte-principal);
+    color: var(--texto-principal);
+    background-color: var(--fundo-claro);
+    min-height: 100vh;
+}
+
+/* Estrutura Principal e Container */
+.container {
+    width: 100%;
+    max-width: var(--largura-maxima);
+    margin: 0 auto;
+    padding: 0 var(--margem-lateral);
+}
+
+/* --------------------------------------
+   Grid (12 Colunas Responsivas)
+   -------------------------------------- */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: var(--gutter);
+}
+
+.col-12 { grid-column: span 12; }
+.col-8 { grid-column: span 8; }
+.col-6 { grid-column: span 6; }
+.col-4 { grid-column: span 4; }
+.col-3 { grid-column: span 3; }
+
+/* Grid Responsividade (Mobile First e Ajuste) */
+@media (max-width: 1024px) {
+    /* Cards e botões se ajustam para 2 colunas */
+    .col-lg-6 { grid-column: span 6; }
+    .col-lg-12 { grid-column: span 12; }
+}
+
+@media (max-width: 768px) {
+    .container { padding: 0 20px; }
+    /* Tudo em coluna única */
+    .col-12, .col-8, .col-6, .col-4, .col-3 { grid-column: span 12; }
+    /* Ajustes de Tipografia */
+    h1 { font-size: 28px; }
+
+}
+
+/* --------------------------------------
+   Componentes
+   -------------------------------------- */
+
+/* Tipografia e Classes Auxiliares */
+h1 { font-size: var(--titulo-principal); font-weight: 700; }
+h2 { font-size: var(--subtitulo); font-weight: 600; }
+.text-secundario { color: var(--texto-secundario); font-size: var(--texto-menor); }
+.text-link { color: var(--cor-primaria); font-weight: 600; text-decoration: none; }
+
+/* 🔘 Botões */
+.btn {
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    border-radius: var(--raio-borda);
+    padding: 14px 28px; 
+    font-size: var(--texto-padrao);
+    font-weight: 600;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    transition: background-color 0.2s, box-shadow 0.2s;
+    width: 100%; /* Por padrão, ocupa o espaço do pai */
+}
+
+/* Botão Primário */
+.btn-primario {
+    background-color: var(--cor-primaria);
+    color: var(--fundo-branco);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
+}
+.btn-primario:hover { background-color: #1e40af; }
+
+/* Botão Secundário */
+.btn-secundario {
+    border: 1px solid var(--cor-primaria);
+    background-color: var(--fundo-branco);
+    color: var(--cor-primaria);
+    box-shadow: none;
+}
+.btn-secundario:hover { background-color: var(--fundo-claro); }
+
+/* Inputs e Campos */
+.input-padrao, .select-padrao, textarea {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #d1d5db;
+    border-radius: var(--raio-borda);
+    font-size: var(--texto-padrao);
+    color: var(--texto-principal);
+    outline: none;
+    transition: border-color 0.2s;
+}
+.input-padrao:focus, .select-padrao:focus, textarea:focus { border-color: var(--cor-primaria); }
+
+/* 📦 Cards */
+.card {
+    background-color: var(--fundo-branco);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Sombra leve */
+    border-radius: var(--raio-borda);
+    padding: 16px;
+}
+
+.avatar-lg {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background-color: var(--fundo-claro);
+    flex-shrink: 0;
+}
+.avatar-md {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: var(--fundo-claro);
+    flex-shrink: 0;
+}
+
+/* Layout Cuidador (Sidebar) */
+.layout-sidebar { display: flex; min-height: 100vh; }
+.sidebar { width: 240px; background-color: var(--fundo-branco); border-right: 1px solid #E5E7EB; flex-shrink: 0; padding-top: 20px; }
+.main-content { flex-grow: 1; padding: 30px; }
+
+@media (max-width: 768px) {
+    .layout-sidebar { flex-direction: column; }
+    .sidebar { width: 100%; height: auto; border-right: none; border-bottom: 1px solid #E5E7EB; display: flex; overflow-x: auto; padding: 10px 0; }
+    .sidebar-menu-item { padding: 8px 15px; margin: 0 5px; flex-shrink: 0; }
+    .main-content { padding: 20px; }
+}
+
+/* =======================================
+   Navegação Fixa Mobile (Tab Bar)
+   ======================================= */
+
+.nav-mobile-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: var(--fundo-branco);
+    border-top: 1px solid #E5E7EB;
+    z-index: 20;
+    padding: 10px 0;
+    /* Por padrão, escondemos em telas grandes (Desktop/Tablet) */
+    display: none; 
+}
+
+.nav-mobile-container {
+    max-width: 450px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+}
+
+.nav-item-mobile {
+    text-decoration: none;
+    color: var(--texto-secundario);
+    font-size: var(--texto-menor);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 5px;
+}
+
+.nav-item-mobile.ativo {
+    color: var(--cor-primaria);
+    font-weight: 600;
+}
+
+.nav-item-mobile-icon {
+    font-size: 24px; /* Tamanho do ícone */
+    margin-bottom: 3px;
+}
+
+/* Regra de Ouro: Exibir SOMENTE em Mobile */
+@media (max-width: 768px) {
+    .nav-mobile-footer {
+        display: block; /* Mostra a barra de navegação no mobile */
+    }
+}
+
+/* 🖼️ LOGO (PNG) */
+.logo-lacos img {
+    height: 9vh; /* Altura padrão para o logo no header */
+    width: auto;
+    vertical-align: middle;
+}
+
+/* ⚙️ Estilos para Ícones em Linha (Inline Icons) */
+.icon-inline {
+    width: 24px; /* Largura padrão para a maioria dos ícones */
+    height: 24px;
+    vertical-align: middle;
+    margin-right: 8px; 
+}
+
+/* 👤 Ícones de Perfil/Header */
+.icon-header {
+    width: 28px;
+    height: 28px;
+    vertical-align: middle;
+}
+
+/* 📱 Ícones de Navegação Móvel */
+.nav-item-mobile-icon {
+    width: 26px;
+    height: 26px;
+    margin-bottom: 3px;
+}
+
+/* Ajustes: Botões Sociais (para garantir que o ícone fique na linha) */
+.btn-social {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 5vh;
+}
+
+/* =======================================
+   MODIFICADORES DE TEMA (FLUXO CUIDADOR - TEMA VERDE)
+   ======================================= */
+
+   /* =======================================
+   MODIFICADORES DE TEMA (FLUXO CUIDADOR - TEMA VERDE)
+   (Aplicado ao #cadastro-form-content)
+   ======================================= */
+
+.theme-cuidador .text-link, 
+.theme-cuidador .btn-primario {
+    /* O texto link e o botão primário passam a usar o verde */
+    color: var(--cor-secundaria);
+}
+
+/* Garante que o botão primário (do cuidador) seja verde sólido */
+.theme-cuidador .btn-primario {
+    background-color: var(--cor-secundaria);
+    color: var(--fundo-branco); 
+}
+
+.theme-cuidador .btn-primario:hover { 
+    background-color: #0c9e6d; 
+}
+
+.theme-cuidador .btn-secundario {
+    /* O botão secundário usa o verde na borda e no texto */
+    border: 1px solid var(--cor-secundaria);
+    color: var(--cor-secundaria);
+}
+
+.theme-cuidador .input-padrao:focus, 
+.theme-cuidador .select-padrao:focus, 
+.theme-cuidador textarea:focus { 
+    border-color: var(--cor-secundaria); /* Foco no campo de input usa o verde */
+}
+
+/* Customização do Título de Seção do Cuidador */
+.theme-cuidador #step-2-dados-cuidador h2 {
+    color: var(--cor-secundaria) !important; /* Força a cor verde no título da seção */
+}
+
+/* Classe a ser adicionada no <body> das telas do Cuidador */
+.theme-cuidador .text-link, 
+.theme-cuidador .btn-primario {
+    /* O texto link e o botão primário passam a usar o verde */
+    color: var(--cor-secundaria);
+}
+
+.theme-cuidador .btn-primario {
+    background-color: var(--cor-secundaria);
+    color: var(--fundo-branco); /* Mantém o texto branco no botão sólido */
+}
+
+.theme-cuidador .btn-primario:hover { 
+    background-color: #0c9e6d; /* Um verde um pouco mais escuro no hover */
+}
+
+.theme-cuidador .btn-secundario {
+    /* O botão secundário usa o verde na borda e no texto */
+    border: 1px solid var(--cor-secundaria);
+    color: var(--cor-secundaria);
+}
+
+.theme-cuidador .input-padrao:focus, 
+.theme-cuidador .select-padrao:focus, 
+.theme-cuidador textarea:focus { 
+    border-color: var(--cor-secundaria); /* Foco no campo de input usa o verde */
+}
+
+/* Navegação Mobile (Baseado na classe theme-cuidador) */
+.theme-cuidador .nav-item-mobile.ativo {
+    color: var(--cor-secundaria);
+}
+
+/* Sidebar (Para garantir que o item ativo seja verde) */
+.theme-cuidador .sidebar a.ativo {
+    color: var(--cor-secundaria);
+    border-left-color: var(--cor-secundaria);
+}
+
+/* =======================================
+   ATUALIZAÇÃO: Layout Cuidador (Sidebar)
+   ======================================= */
+
+.layout-sidebar { 
+    display: flex; 
+    min-height: 100vh; 
+}
+
+/* Sidebar (Para Desktop) */
+.sidebar { 
+    width: 240px; 
+    background-color: var(--fundo-branco); /* Mantendo branco para contraste */
+    border-right: 1px solid #E5E7EB; 
+    flex-shrink: 0; 
+    padding: 20px 0; /* Ajuste para preencher melhor a altura */
+}
+
+/* Estilo do Item de Menu na Sidebar */
+.sidebar-menu-item { 
+    display: block;
+    padding: 12px 20px;
+    margin: 4px 0;
+    text-decoration: none;
+    color: var(--texto-principal);
+    font-weight: 500;
+    transition: background-color 0.2s, border-left 0.2s;
+    border-left: 4px solid transparent; /* Para o efeito de "item ativo" */
+}
+
+.sidebar-menu-item:hover {
+    background-color: var(--fundo-claro);
+}
+
+.sidebar-menu-item.ativo {
+    background-color: rgba(37, 99, 235, 0.1); /* Um leve fundo azul para o ativo padrão */
+    color: var(--cor-primaria);
+    font-weight: 700;
+    border-left-color: var(--cor-primaria);
+}
+
+/* 🟢 Estilos da Sidebar para o Tema Cuidador (Verde) */
+.theme-cuidador .sidebar-menu-item.ativo {
+    background-color: rgba(16, 185, 129, 0.1); /* Leve fundo verde para o ativo */
+    color: var(--cor-secundaria);
+    border-left-color: var(--cor-secundaria);
+}
+
+/* --------------------------------------
+   ATUALIZAÇÃO: Footer Fixo Mobile
+   -------------------------------------- */
+
+
+/* 🟢 Footer para o Tema Cuidador (Fundo Verde Claro) */
+/* Usaremos uma cor clara para o fundo do footer do cuidador para diferenciá-lo */
+.theme-cuidador .nav-mobile-footer {
+    background-color: #E6F6F1; /* Um verde bem claro */
+    border-top: 1px solid var(--cor-secundaria); 
+}
+
+/* Regra de Ouro: Exibir SOMENTE em Mobile */
+@media (max-width: 768px) {
+    /* No mobile, a sidebar vira o menu horizontal no topo, sem fundo colorido */
+    .sidebar { width: 100%; height: auto; border-right: none; border-bottom: 1px solid #E5E7EB; display: flex; overflow-x: auto; padding: 10px 0; }
+    .sidebar-menu-item { padding: 8px 15px; margin: 0 5px; flex-shrink: 0; border-left: none; border-bottom: 2px solid transparent; }
+    .sidebar-menu-item.ativo { border-left: none; } /* Remove o border-left no mobile */
+}
+
+/* =======================================
+   ATUALIZAÇÃO: Container e Responsividade
+   ======================================= */
+
+.container {
+    width: 95%; /* 95% de largura padrão */
+    max-width: 1200px; /* Limite de largura para telas muito grandes */
+    margin: 0 auto;
+    padding: 0 var(--margem-lateral); /* 20px de padding (mobile) */
+}
+
+/* Bordas Livres em Desktop (Espaço Lateral Mais Amplo) */
+@media (min-width: 1024px) {
+    .container {
+        /* Reduz a largura máxima para dar mais "ar" nas laterais */
+        max-width: 1000px; 
+    }
+}
+
+/* =======================================
+   ATUALIZAÇÃO: Estilos Dinâmicos no Cadastro
+   ======================================= */
+
+/* Estilo Base para destaque do formulário */
+#cadastro-form-content {
+    border: 2px solid #E5E7EB;
+    padding: 40px;
+    border-radius: 12px;
+    transition: border-color 0.4s ease;
+}
+
+/* Destaque Cliente (Azul) */
+#user-type-select:not([data-user-type="cuidador"]):focus ~ #cadastro-form-content {
+    border-color: var(--cor-primaria);
+}
+#user-type-select[data-user-type="cliente"] ~ #cadastro-form-content {
+    border-color: var(--cor-primaria);
+}
+
+/* Destaque Cuidador (Verde) */
+#user-type-select[data-user-type="cuidador"] ~ #cadastro-form-content {
+    border-color: var(--cor-secundaria);
+}

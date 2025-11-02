@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LAÇOS tela de pagamento</title> 
+    
+    <link rel="manifest" href="manifest.json">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    
+    <style>
+      
+    </style>
+</head>
+<body>
+    <main class="container" style="padding: 40px;">
+    <h1 class="text-link" style="margin-bottom: 30px;">Pagamento do Serviço</h1>
+
+    <div class="grid">
+        <div class="col-6 col-lg-12" style="margin-bottom: 20px;">
+            <h2>Passo 3: Escolha a forma de pagamento</h2>
+            <div class="card" style="margin-bottom: 15px;">
+                <input type="radio" id="pix" name="pagamento" checked><label for="pix" style="margin-left: 10px; font-weight: 600;">PIX (Recebimento imediato)</label>
+            </div>
+            <div class="card" style="margin-bottom: 15px;">
+                <input type="radio" id="credito" name="pagamento"><label for="credito" style="margin-left: 10px; font-weight: 600;">Cartão de Crédito</label>
+            </div>
+            
+            <p class="text-secundario" style="font-size: var(--texto-menor); margin-top: 20px; padding: 10px; border-left: 3px solid var(--cor-secundaria);">
+                * O valor fica retido na plataforma e é liberado ao cuidador após sua confirmação de serviço.
+            </p>
+        </div>
+        
+        <div class="col-6 col-lg-12">
+            <div class="card" style="padding: 20px; background-color: var(--fundo-claro); border: 1px solid #E5E7EB;">
+                <h2 style="margin-bottom: 15px;">Resumo do Pedido</h2>
+                <p style="display: flex; justify-content: space-between;"><span>Cuidador:</span> <span style="font-weight: 600;">[Nome Cuidador]</span></p>
+                <p style="display: flex; justify-content: space-between;"><span>Data/Hora:</span> <span style="font-weight: 600;">25/10 - 10:00 (2h)</span></p>
+                <p style="display: flex; justify-content: space-between; margin-top: 15px; border-top: 1px solid #E5E7EB; padding-top: 10px;">
+                    <span>Total a Pagar:</span> <span style="font-size: var(--subtitulo); color: var(--cor-primaria); font-weight: 700;">R$ 80,00</span>
+                </p>
+            </div>
+            <a href="feedback.html" class="btn btn-primario" style="margin-top: 20px;">Confirmar Pagamento e Agendar</a>
+        </div>
+    </div>
+</main>
+<footer class="nav-mobile-footer">
+    <div class="nav-mobile-container">
+        <a href="home_cliente.html" class="nav-item-mobile ativo">
+            <img src="icons/search.png" alt="Home" class="nav-item-mobile-icon">
+            Buscar
+        </a>
+        <a href="perfil_cliente.html" class="nav-item-mobile">
+            <img src="icons/calendar.svg" alt="Agendamentos" class="nav-item-mobile-icon">
+            Agendamentos
+        </a>
+        <a href="perfil_cliente.html" class="nav-item-mobile">
+            <img src="icons/user_profile.svg" alt="Perfil" class="nav-item-mobile-icon">
+            Perfil
+        </a>
+    </div>
+</footer>
+<script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(registration => console.log('SW registered!'))
+                    .catch(registrationError => console.log('SW registration failed: ', registrationError));
+            });
+        }
+    </script>
+</body>
+</html>

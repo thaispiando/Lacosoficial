@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LAÇOS tela de agendamento</title> 
+    
+    <link rel="manifest" href="manifest.json">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    
+    <style>
+      
+    </style>
+</head>
+<body>
+    <main class="container" style="padding: 40px;">
+    <h1 class="text-link" style="margin-bottom: 30px;">Agendar Serviço com [Nome Cuidador]</h1>
+    
+    <div class="grid">
+        <div class="col-6 col-lg-12" style="margin-bottom: 20px;">
+            <h2>Passo 1: Data e Hora</h2>
+            <div class="card" style="margin-top: 10px;">
+                <p style="font-weight: 600; text-align: center; margin-bottom: 15px;">[Calendário Simulado]</p>
+                <div style="margin-bottom: 15px;">
+                    <label class="text-secundario" style="display: block; margin-bottom: 5px;">Data Selecionada</label>
+                    <input type="date" class="input-padrao" value="2025-10-25">
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <label class="text-secundario" style="display: block; margin-bottom: 5px;">Hora de Início</label>
+                    <input type="time" class="input-padrao" value="10:00">
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-6 col-lg-12">
+            <h2>Passo 2: Detalhes e Confirmação</h2>
+            <div class="card" style="margin-top: 10px;">
+                <div style="margin-bottom: 15px;">
+                    <label class="text-secundario" style="display: block; margin-bottom: 5px;">Duração (horas)</label>
+                    <select class="input-padrao"><option>2 horas</option><option>3 horas</option></select>
+                </div>
+                <div style="margin-bottom: 20px;">
+                    <label class="text-secundario" style="display: block; margin-bottom: 5px;">Tipo de Serviço</label>
+                    <textarea class="input-padrao" rows="3" placeholder="Ex: Acompanhamento de idoso e medicação"></textarea>
+                </div>
+
+                <div style="text-align: center; border-top: 1px solid #E5E7EB; padding-top: 20px;">
+                    <p class="text-secundario">Valor Estimado (2h)</p>
+                    <h2 style="color: var(--cor-primaria); font-size: var(--titulo-principal);">R$ 80,00</h2>
+                </div>
+            </div>
+            <a href="pagamento.html" class="btn btn-primario" style="margin-top: 20px;">Avançar para Pagamento</a>
+        </div>
+    </div>
+</main>
+<footer class="nav-mobile-footer">
+    <div class="nav-mobile-container">
+        <a href="home_cliente.html" class="nav-item-mobile ativo">
+            <img src="icons/search.png" alt="Home" class="nav-item-mobile-icon">
+            Buscar
+        </a>
+        <a href="perfil_cliente.html" class="nav-item-mobile">
+            <img src="icons/calendar.svg" alt="Agendamentos" class="nav-item-mobile-icon">
+            Agendamentos
+        </a>
+        <a href="perfil_cliente.html" class="nav-item-mobile">
+            <img src="icons/user_profile.svg" alt="Perfil" class="nav-item-mobile-icon">
+            Perfil
+        </a>
+    </div>
+</footer>
+<script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(registration => console.log('SW registered!'))
+                    .catch(registrationError => console.log('SW registration failed: ', registrationError));
+            });
+        }
+    </script>
+</body>
+</html>

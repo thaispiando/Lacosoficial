@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LAÇOS tela de login</title> 
+    
+    <link rel="manifest" href="manifest.json">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    
+    <style>
+      
+    </style>
+</head>
+<body>
+    <main class="container" style="padding-top: 40px; padding-bottom: 40px;">
+    <div style="display: flex; align-items: center; gap: 20px; border-bottom: 1px solid #E5E7EB; padding-bottom: 30px;">
+        <div class="avatar-lg" style="background-color: var(--cor-secundaria);"></div>
+        <div>
+            <h1>Nome do Cuidador Exemplo</h1>
+            <h2 class="text-secundario" style="font-size: var(--texto-padrao);">Fisioterapeuta | 5 anos de experiência</h2>
+            <div style="display: flex; align-items: center; gap: 5px; color: var(--cor-avaliacao); font-size: var(--subtitulo);">
+                <span>⭐⭐⭐⭐⭐</span> <span class="text-secundario">(15 Avaliações)</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid" style="margin-top: 30px;">
+        <div class="col-8 col-lg-12">
+            <h2>Sobre o Profissional</h2>
+            <p style="margin-top: 10px; margin-bottom: 20px;">
+                Descrição completa do cuidador. Foco em atendimento humanizado e técnicas avançadas de mobilidade.
+            </p>
+            
+            <h3>Certificações</h3>
+            <ul style="list-style: none; margin-top: 10px;">
+                <li class="text-secundario" style="margin-bottom: 5px;">[Ícone] Especialização em Cuidados Paliativos</li>
+                <li class="text-secundario" style="margin-bottom: 5px;">[Ícone] CPR/Primeiros Socorros (Válido até 2026)</li>
+            </ul>
+
+            <h3 style="margin-top: 30px;">Avaliações Recentes</h3>
+            <div class="card" style="margin-top: 15px; border-left: 3px solid var(--cor-avaliacao);">
+                <p style="font-weight: 600;">Maria Silva</p>
+                <div style="color: var(--cor-avaliacao); margin: 5px 0;">⭐⭐⭐⭐⭐</div>
+                <p class="text-secundario" style="font-size: var(--texto-menor);">"Serviço excelente, muito atencioso e pontual. Recomendo!"</p>
+            </div>
+        </div>
+        
+        <div class="col-4 col-lg-12">
+            <div class="card" style="padding: 20px; background-color: var(--fundo-claro); position: sticky; top: 20px;">
+                <p style="font-size: var(--subtitulo); font-weight: 700; color: var(--cor-primaria);">R$ 40,00 / hora</p>
+                <p class="text-secundario" style="margin-bottom: 15px;">*Valor pode variar por serviço</p>
+                
+                <a href="agendamento.html" class="btn btn-primario">Solicitar Serviço</a>
+
+                <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid #E5E7EB; text-align: center;">
+                    <p style="font-weight: 600;">Disponibilidade Geral</p>
+                    <p class="text-secundario">Segunda a Sábado</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<footer class="nav-mobile-footer">
+    <div class="nav-mobile-container">
+        <a href="home_cliente.html" class="nav-item-mobile ativo">
+            <img src="icons/search.png" alt="Home" class="nav-item-mobile-icon">
+            Buscar
+        </a>
+        <a href="perfil_cliente.html" class="nav-item-mobile">
+            <img src="icons/calendar.svg" alt="Agendamentos" class="nav-item-mobile-icon">
+            Agendamentos
+        </a>
+        <a href="perfil_cliente.html" class="nav-item-mobile">
+            <img src="icons/user_profile.svg" alt="Perfil" class="nav-item-mobile-icon">
+            Perfil
+        </a>
+    </div>
+</footer>
+<script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(registration => console.log('SW registered!'))
+                    .catch(registrationError => console.log('SW registration failed: ', registrationError));
+            });
+        }
+    </script>
+</body>
+</html>

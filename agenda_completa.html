@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LAÇOS - agenda completa</title> 
+    
+    <link rel="manifest" href="manifest.json">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    
+    <style>
+      
+    </style>
+</head>
+<body class="theme-cuidador">
+   <div class="layout-sidebar">
+    <nav class="sidebar">
+        <a href="dashboard_cuidador.html" class="item-menu sidebar-menu-item" style="display: block;">Dashboard</a>
+        <a href="agenda_completa.html" class="item-menu ativo sidebar-menu-item" style="display: block;">Agenda</a>
+        <a href="perfil_profissional.html" class="item-menu sidebar-menu-item" style="display: block;">Meu Perfil</a>
+        <a href="historico_pagamentos.html" class="item-menu sidebar-menu-item" style="display: block;">Pagamentos</a>
+    </nav>
+    
+    <main class="main-content">
+        <h1>Agenda Mensal</h1>
+        <div class="card" style="margin-top: 20px; padding: 20px;">
+            <h2 style="text-align: center; margin-bottom: 15px;">Novembro 2025</h2>
+            <div class="grid" style="grid-template-columns: repeat(7, 1fr); text-align: center; font-weight: 600; margin-bottom: 10px;">
+                <span>Dom</span><span>Seg</span><span>Ter</span><span>Qua</span><span>Qui</span><span>Sex</span><span>Sáb</span>
+            </div>
+            <div class="grid" style="grid-template-columns: repeat(7, 1fr); gap: 5px;">
+                <div style="height: 50px; border: 1px solid #E5E7EB; background: var(--cor-sucesso); color: white; padding: 5px; border-radius: 4px;">1<span style="font-size: 10px; display: block;">(2)</span></div>
+                <div style="height: 50px; border: 1px solid #E5E7EB; background: var(--cor-primaria); color: white; padding: 5px; border-radius: 4px;">2<span style="font-size: 10px; display: block;">(1)</span></div>
+                <div style="height: 50px; border: 1px solid #E5E7EB; padding: 5px; border-radius: 4px; color: var(--texto-secundario);">3</div>
+                </div>
+            <p class="text-secundario" style="margin-top: 15px; font-size: var(--texto-menor);">Verde: Confirmado. Azul: Pendente de Aceite/Pagamento.</p>
+        </div>
+    </main>
+</div>
+<footer class="nav-mobile-footer">
+    <div class="nav-mobile-container">
+        <a href="dashboard_cuidador.html" class="nav-item-mobile ativo">
+            <img src="icons/dashboard.svg" alt="Dashboard" class="nav-item-mobile-icon">
+            Dashboard
+        </a>
+        <a href="agenda_completa.html" class="nav-item-mobile">
+            <img src="icons/calendar.svg" alt="Agenda" class="nav-item-mobile-icon">
+            Agenda
+        </a>
+        <a href="historico_pagamentos.html" class="nav-item-mobile">
+            <img src="icons/money.svg" alt="Pagamentos" class="nav-item-mobile-icon">
+            Pagamentos
+        </a>
+        <a href="perfil_profissional.html" class="nav-item-mobile">
+            <img src="icons/person.svg" alt="Meu Perfil" class="nav-item-mobile-icon">
+            Meu Perfil
+        </a>
+    </div>
+</footer>
+<script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(registration => console.log('SW registered!'))
+                    .catch(registrationError => console.log('SW registration failed: ', registrationError));
+            });
+        }
+    </script>
+</body>
+</html>

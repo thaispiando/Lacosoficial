@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel de Aprovação de Cuidador</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-50 min-h-screen p-4 md:p-8">
+  <div class="max-w-4xl mx-auto">
+    <header class="mb-10 p-6 bg-white shadow-xl rounded-xl border-t-4 border-primary">
+      <h1 class="text-3xl font-extrabold text-center text-primary">Painel de Aprovação de Cuidador</h1>
+      <p class="text-center text-gray-500 mt-2">
+        Clique nos botões para aprovar ou rejeitar cadastros pendentes.
+      </p>
+    </header>
+
+    <!-- Contêiner dos cuidadores -->
+    <div id="simulacao-cuidador" class="space-y-6"></div>
+  </div>
+
+  <!-- Script Firebase e lógica -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { getFirestore, collection, getDocs, doc, updateDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
+    // Configuração Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyBFspeEITyz0L6gmBWgZISlTJU_FDN7H7s",
+      authDomain: "lacoscuidamais.firebaseapp.com",
+      projectId: "lacoscuidamais",
+      storageBucket: "lacoscuidamais.firebasestorage.app",
+      messagingSenderId: "756414982825",
+      appId: "1:756414982825:web:871b30376c9196c80d97b8",
+      measurementId: "G-0YG12ZBFGY"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Esperar o DOM carregar
+    window.addEventListener("DOMContentLoaded", async () => {
+      const container = document.getElementById('simulacao-cuidador');
+
+      // Função para criar card de cuidador
+      function criarCard(cuidador) {
+        const card = document.createElement('div');
+        card.className = "card bg-white shadow-lg rounded-xl p-6 border border-gray-200";
+
+        card.innerHTML = `
+          <div class="mb-4 border-b pb-4 border-gray-100">
+            <p class="text-xl font-bold text-primary">${nome}</p>
+            <p class="text-sm text-gray-600">Email: ${email}</p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-700">
+            <div class="flex items-center">
+              <span class="w-4 h-4 mr-2 text-secondary">🆔</span>
+              <p><strong>CPF:</strong> ${cpf}</p>
+            </div>
+            <div class="flex items-center">
+              <span class="w-4 h-4 mr-2 text-secondary">📞</span>
+              <p><strong>Telefone:</strong> ${telefone}</p>
+            </div>
+          </div>
+
+          <div class="mt-4 p-3 bg-gray-50 rounded-lg border border-dashed border-gray-200">
+            <div class="flex items-start text-gray-800">
+              <span class="w-5 h-5 mr-3 text-primary">📍</span>
+              <div>
+                <h3 class="font-semibold text-base">Endereço de Atendimento</h3>
+                <p class="mt-1">${endereco}</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-6 border-t pt-4 border-gray-100">
+            <h3 class="font-semibold text-gray-800 flex items-center">
+              <span class="w-5 h-5 mr-2 text-primary">✔️</span>
+              Documentação
+            </h3>
+            ${certificado 
+              ? `<p class="mt-2 text-sm text-gray-500">Certificado enviado.</p>
+                 <a href="${certificado}" target="_blank"
+                    class="block mt-2 rounded-lg overflow-hidden transition duration-150 transform hover:scale-[1.01] hover:shadow-lg max-w-xs mx-auto md:mx-0">
+                    <img src="${certificado}" class="w-full h-auto max-h-48 object-cover border border-gray-100">
+                 </a>`
+              : `<p class="mt-2 text-red-500 font-medium">Certificado: Não enviado / Inválido</p>`
+            }
+          </div>
+
+          <div class="mt-8 flex flex-col md:flex-row gap-3">
+            <button class="aprovar btn bg-green-500 text-white font-semibold py-3 px-4 rounded-lg flex-1">Aprovar Cuidador</button>
+            <button class="rejeitar btn bg-red-500 text-white font-semibold py-3 px-4 rounded-lg flex-1">Rejeitar Cadastro</button>
+          </div>
+        `;
+
+        // Eventos dos botões
+        card.querySelector('.aprovar').addEventListener('click', async () => {
+          await updateDoc(doc(db, "cuidadores", cuidador.id), { status: "aprovado" });
+          alert(`✅ Cuidador ${nome} aprovado!`);
+          card.remove();
+        });
+
+        card.querySelector('.rejeitar').addEventListener('click', async () => {
+          await updateDoc(doc(db, "cuidadores", id), { status: "rejeitado" });
+          alert(`❌ Cuidador ${nome} rejeitado.`);
+          card.remove();
+        });
+
+        container.appendChild(card);
+      }
+
+      // Carregar cuidadores pendentes
+      async function carregarCuidadores() {
+        const snapshot = await getDocs(collection(db, "cuidadores"));
+        let encontrou = false;
+
+        snapshot.forEach(docSnap => {
+          const data = docSnap.data();
+          if (data.status === "pendente") {
+            criarCard({ id: docSnap.id, ...data });
+            encontrou = true;
+          }
+        });
+
+        if (!encontrou) {
+          container.innerHTML = `
+            <p class="text-center text-gray-500 text-lg font-medium">
+              Nenhum cadastro pendente no momento. 🎉
+            </p>`;
+        }
+      }
+
+      carregarCuidadores();
+    });
+  </script>
+</body>
+</html>

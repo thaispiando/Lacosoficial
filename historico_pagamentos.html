@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LAÇOS - perfil profissional</title> 
+    
+    <link rel="manifest" href="manifest.json">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    
+    <style>
+      
+    </style>
+</head>
+<body class="theme-cuidador">
+   <div class="layout-sidebar">
+    <nav class="sidebar">
+        <a href="dashboard_cuidador.html" class="item-menu sidebar-menu-item" style="display: block;">Dashboard</a>
+        <a href="agenda_completa.html" class="item-menu sidebar-menu-item" style="display: block;">Agenda</a>
+        <a href="perfil_profissional.html" class="item-menu ativo sidebar-menu-item" style="display: block;">Meu Perfil</a>
+        <a href="historico_pagamentos.html" class="item-menu sidebar-menu-item" style="display: block;">Pagamentos</a>
+    </nav>
+    
+
+    
+    <main class="main-content">
+        <h1>Histórico e Pagamentos</h1>
+        
+        <div class="card" style="background-color: var(--cor-secundaria); color: white; text-align: center; margin-bottom: 20px; padding: 20px;">
+            <p style="font-size: var(--subtitulo);">Saldo Total a Receber</p>
+            <p style="font-size: var(--titulo-principal); font-weight: 700;">R$ 1.240,00</p>
+            <button class="btn btn-primario" style="background-color: white; color: var(--cor-secundaria); margin-top: 10px; width: 150px; padding: 10px;">Sacar</button>
+        </div>
+
+        <h2 style="margin-bottom: 10px;">Transações Recentes</h2>
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; min-width: 600px; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden;">
+                <thead>
+                    <tr style="background-color: var(--fundo-claro); text-align: left; font-weight: 600;">
+                        <th style="padding: 15px; border-bottom: 1px solid #E5E7EB;">Data</th>
+                        <th style="padding: 15px; border-bottom: 1px solid #E5E7EB;">Cliente</th>
+                        <th style="padding: 15px; border-bottom: 1px solid #E5E7EB;">Valor</th>
+                        <th style="padding: 15px; border-bottom: 1px solid #E5E7EB;">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="padding: 15px; border-bottom: 1px solid #E5E7EB;">20/10/2025</td>
+                        <td style="padding: 15px; border-bottom: 1px solid #E5E7EB;">Ana Costa</td>
+                        <td style="padding: 15px; border-bottom: 1px solid #E5E7EB; font-weight: 600;">R$ 160,00</td>
+                        <td style="padding: 15px; border-bottom: 1px solid #E5E7EB; color: var(--cor-sucesso); font-weight: 600;">Pago</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 15px; border-bottom: 1px solid #E5E7EB;">22/10/2025</td>
+                        <td style="padding: 15px; border-bottom: 1px solid #E5E7EB;">Pedro Dantas</td>
+                        <td style="padding: 15px; border-bottom: 1px solid #E5E7EB; font-weight: 600;">R$ 80,00</td>
+                        <td style="padding: 15px; border-bottom: 1px solid #E5E7EB; color: var(--cor-erro); font-weight: 600;">Pendente</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+</div>
+</div>
+<footer class="nav-mobile-footer">
+    <div class="nav-mobile-container">
+        <a href="dashboard_cuidador.html" class="nav-item-mobile ativo">
+            <img src="icons/dashboard.svg" alt="Dashboard" class="nav-item-mobile-icon">
+            Dashboard
+        </a>
+        <a href="agenda_completa.html" class="nav-item-mobile">
+            <img src="icons/calendar.svg" alt="Agenda" class="nav-item-mobile-icon">
+            Agenda
+        </a>
+        <a href="historico_pagamentos.html" class="nav-item-mobile">
+            <img src="icons/money.svg" alt="Pagamentos" class="nav-item-mobile-icon">
+            Pagamentos
+        </a>
+        <a href="perfil_profissional.html" class="nav-item-mobile">
+            <img src="icons/person.svg" alt="Meu Perfil" class="nav-item-mobile-icon">
+            Meu Perfil
+        </a>
+    </div>
+</footer>
+<script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(registration => console.log('SW registered!'))
+                    .catch(registrationError => console.log('SW registration failed: ', registrationError));
+            });
+        }
+    </script>
+</body>
+</html>

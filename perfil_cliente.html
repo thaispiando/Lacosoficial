@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LAÇOS - Meu Perfil</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#065f46',
+                        secondary: '#34d399',
+                        'fundo-claro': '#f9fafb',
+                        'texto-principal': '#1f2937',
+                        'texto-secundario': '#6b7280',
+                        'cor-erro': '#ef4444',
+                    },
+                    fontFamily: { sans: ['Inter', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+
+    <!-- Ícones SVG -->
+    <svg style="display:none;" id="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    <svg style="display:none;" id="icon-user" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    <svg style="display:none;" id="icon-pencil" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16 4l4 4L7 21H3v-4L16 4z"/></svg>
+    <svg style="display:none;" id="icon-arrow-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5m7-7l-7 7 7 7"/></svg>
+    <svg style="display: none;" id="icon-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+    <svg style="display: none;" id="icon-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+    <svg style="display: none;" id="icon-log-out" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+    <svg style="display: none;" id="icon-dollar-sign" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" x2="12" y1="2" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+
+    <script>
+        function getIcon(id, className='w-6 h-6'){
+            const iconSvg = document.getElementById(id);
+            if(!iconSvg) return '';
+            const svgContent = iconSvg.outerHTML;
+            return `<span class="${className}">${svgContent.replace('style="display: none;"','').replace(`id="${id}"`,'')}</span>`;
+        }
+    </script>
+
+    <!-- Firebase -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBFspeEITyz0L6gmBWgZISlTJU_FDN7H7s",
+            authDomain: "lacoscuidamais.firebaseapp.com",
+            projectId: "lacoscuidamais",
+            storageBucket: "lacoscuidamais.appspot.com",
+            messagingSenderId: "756414982825",
+            appId: "1:756414982825:web:871b30376c9196c80d97b8"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
+
+        onAuthStateChanged(auth, async (user) => {
+            if(!user){ window.location.href="index.html"; return; }
+
+            const docRef = doc(db, "usuarios", user.uid);
+            const docSnap = await getDoc(docRef);
+            if(!docSnap.exists()) return;
+            const data = docSnap.data();
+
+            const nomeInput = document.querySelector('input[name="nome"]');
+            const emailInput = document.querySelector('input[name="email"]');
+            const enderecoInput = document.querySelector('input[name="endereco"]');
+            const descricaoInput = document.getElementById('descricao-perfil');
+            const perfilImg = document.getElementById('perfil-img');
+            const iconUser = document.getElementById('icon-user-div');
+
+            nomeInput.value = data.nome || '';
+            emailInput.value = data.email || '';
+            const end = data.endereco || {};
+            enderecoInput.value = `${end.rua||''}, ${end.numero||''} - ${end.bairroCidade||''}`;
+            descricaoInput.value = data.descricao || '';
+
+            const greeting = document.getElementById('greeting');
+            const primeiroNome = (data.nome||'').split(' ')[0];
+            greeting.textContent = `Olá, ${primeiroNome}!`;
+
+            if(data.fotoURL){
+                perfilImg.src = data.fotoURL;
+                perfilImg.classList.remove('hidden');
+                if(iconUser) iconUser.style.display='none';
+            }
+        });
+
+        document.getElementById('perfil-file').addEventListener('change', async (e)=>{
+            const file = e.target.files[0];
+            if(!file) return;
+            const user = auth.currentUser;
+            if(!user) return;
+
+            const storageRef = ref(storage, `perfil/${user.uid}`);
+            await uploadBytes(storageRef, file);
+            const url = await getDownloadURL(storageRef);
+
+            const perfilImg = document.getElementById('perfil-img');
+            perfilImg.src = url;
+            perfilImg.classList.remove('hidden');
+            document.getElementById('icon-user-div').style.display='none';
+            document.getElementById('modal-img').src = url;
+
+            await updateDoc(doc(db, "usuarios", user.uid), { fotoURL: url });
+        });
+
+        function openModal(){
+            const modal = document.getElementById('modal-perfil');
+            const modalImg = document.getElementById('modal-img');
+            const perfilImg = document.getElementById('perfil-img');
+            if(perfilImg.src) modalImg.src = perfilImg.src;
+            modal.classList.remove('hidden');
+        }
+        function closeModal(){ document.getElementById('modal-perfil').classList.add('hidden'); }
+
+        document.querySelector('form').addEventListener('submit', async e=>{
+            e.preventDefault();
+            const user = auth.currentUser;
+            if(!user) return;
+
+            const nomeInput = document.querySelector('input[name="nome"]');
+            const emailInput = document.querySelector('input[name="email"]');
+            const enderecoInput = document.querySelector('input[name="endereco"]');
+            const descricaoInput = document.getElementById('descricao-perfil');
+
+            const enderecoParts = enderecoInput.value.split(/,|-/).map(p=>p.trim());
+
+            await updateDoc(doc(db,"usuarios",user.uid),{
+                nome: nomeInput.value,
+                email: emailInput.value,
+                descricao: descricaoInput.value,
+                endereco:{
+                    rua:enderecoParts[0]||'',
+                    numero:enderecoParts[1]||'',
+                    bairroCidade:enderecoParts[2]||''
+                }
+            });
+
+            alert("Alterações salvas com sucesso!");
+        });
+    </script>
+</head>
+<body class="bg-gray-50 font-sans">
+
+<header class="sticky top-0 bg-white shadow-md border-b border-gray-200 py-3 md:py-4 z-10">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+        <a href="home_cliente.html" class="text-2xl font-bold text-primary hover:text-green-700 transition">LAÇOS</a>
+        <h1 class="text-xl font-semibold text-texto-principal hidden md:block">Meu Perfil</h1>
+        <a href="home_cliente.html" class="text-texto-principal hover:text-primary transition">
+            <script>document.write(getIcon('icon-close','w-6 h-6'));</script>
+        </a>
+    </div>
+</header>
+
+<main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-10">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+        <div class="lg:col-span-8">
+            <!-- Perfil e Avatar -->
+            <div class="flex items-center gap-4 mb-8 border-b border-gray-200 pb-6 relative">
+                <div class="relative w-16 h-16 rounded-full bg-primary flex items-center justify-center text-white font-bold text-2xl shadow-lg cursor-pointer" onclick="openModal()">
+                    <div id="icon-user-div"><script>document.write(getIcon('icon-user','w-8 h-8'));</script></div>
+                    <img id="perfil-img" class="absolute inset-0 w-full h-full object-cover rounded-full hidden" alt="Foto Perfil">
+                </div>
+                <div>
+                    <h2 id="greeting" class="text-3xl font-bold text-texto-principal">Olá, Nome do Cliente!</h2>
+                    <p class="text-texto-secundario text-sm mt-0.5">Membro desde 2023</p>
+                </div>
+            </div>
+
+            <!-- Formulário -->
+            <h2 class="text-xl font-semibold text-texto-principal mb-4">Dados Cadastrais</h2>
+            <form class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+                <div class="col-span-1">
+                    <label class="block text-sm font-medium text-texto-secundario mb-1">Nome Completo</label>
+                    <input type="text" name="nome" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition">
+                </div>
+                <div class="col-span-1">
+                    <label class="block text-sm font-medium text-texto-secundario mb-1">E-mail</label>
+                    <input type="email" name="email" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition">
+                </div>
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-medium text-texto-secundario mb-1">Endereço (Principal)</label>
+                    <input type="text" name="endereco" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition">
+                </div>
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-medium text-texto-secundario mb-1">Descrição do Perfil</label>
+                    <textarea id="descricao-perfil" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition"></textarea>
+                </div>
+                <div class="md:col-span-2 mt-2">
+                    <button type="submit" class="w-full md:w-auto px-6 py-3 bg-primary text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition duration-200">
+                        Salvar Alterações
+                    </button>
+                </div>
+            </form>
+
+            <!-- Agendamentos -->
+            <h2 class="text-xl font-semibold text-texto-principal mt-10 mb-4">Meus Agendamentos (Próximos)</h2>
+
+            <div class="bg-white shadow-lg rounded-xl p-5 border-l-4 border-secondary mb-4 transition duration-200 hover:shadow-xl">
+                <p class="font-bold text-lg text-texto-principal">Cuidador(a) Maria</p>
+                <p class="text-texto-secundario text-sm mt-1">Dia: 20/11/2025 | Hora: 15:00 - 17:00</p>
+                <p class="text-texto-secundario text-sm">Status: <span class="text-secondary font-semibold">Confirmado</span></p>
+                <button class="px-4 py-2 bg-secondary text-white font-medium rounded-lg hover:bg-green-500 transition duration-200 mt-3">
+                    Cancelar
+                </button>
+            </div>
+
+            <div class="bg-white shadow-lg rounded-xl p-5 border-l-4 border-primary mb-4 transition duration-200 hover:shadow-xl">
+                <p class="font-bold text-lg text-texto-principal">Cuidador(a) Pedro</p>
+                <p class="text-texto-secundario text-sm mt-1">Dia: 05/12/2025 | Hora: 09:00 - 12:00</p>
+                <p class="text-texto-secundario text-sm">Status: <span class="text-primary font-semibold">Aguardando Pagamento</span></p>
+                <a href="pagamento.html" class="inline-block px-4 py-2 bg-primary text-white font-medium rounded-lg hover:bg-green-700 transition duration-200 mt-3">
+                    Pagar Agora
+                </a>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="lg:col-span-4">
+            <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100 lg:sticky lg:top-[90px]">
+                <h2 class="text-xl font-semibold text-texto-principal mb-4">Minhas Ações</h2>
+                <ul class="space-y-3">
+                    <li><a href="#" class="text-texto-principal hover:text-primary transition block py-1">Histórico de Serviços</a></li>
+                    <li><a href="#" class="text-texto-principal hover:text-primary transition block py-1 flex items-center"><script>document.write(getIcon('icon-dollar-sign','w-4 h-4 mr-2 text-primary'));</script> Formas de Pagamento</a></li>
+                    <li class="pt-4 border-t border-gray-200 mt-4">
+                        <a href="index.html" class="text-cor-erro font-semibold hover:text-red-600 transition block flex items-center">
+                            <script>document.write(getIcon('icon-log-out','w-5 h-5 mr-2 text-cor-erro'));</script>
+                            Sair da Conta
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<!-- Footer Mobile -->
+<footer class="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-xl z-20">
+    <div class="flex justify-around items-center h-16">
+        <a href="home_cliente.html" class="flex flex-col items-center text-xs font-medium text-primary">
+            <script>document.write(getIcon('icon-search','w-5 h-5'));</script>
+            Buscar
+        </a>
+        <a href="perfil_cliente.html" class="flex flex-col items-center text-xs font-medium text-texto-secundario hover:text-primary transition">
+             <script>document.write(getIcon('icon-calendar','w-5 h-5'));</script>
+            Agendamentos
+        </a>
+        <a href="perfil_cliente.html" class="flex flex-col items-center text-xs font-medium text-texto-secundario hover:text-primary transition">
+            <script>document.write(getIcon('icon-user','w-5 h-5'));</script>
+            Perfil
+        </a>
+    </div>
+</footer>
+
+<!-- Modal Foto Perfil -->
+<div id="modal-perfil" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+    <div class="relative bg-white rounded-lg p-4 max-w-md w-full">
+        <button onclick="closeModal()" class="absolute top-2 left-2 text-texto-principal hover:text-primary">
+            <script>document.write(getIcon('icon-arrow-left','w-6 h-6'));</script>
+        </button>
+        <img id="modal-img" class="w-full h-80 object-cover rounded-lg" alt="Foto Perfil">
+        <label for="perfil-file" class="absolute bottom-4 right-4 cursor-pointer bg-white p-2 rounded-full shadow-lg border border-gray-200 hover:bg-gray-100">
+            <script>document.write(getIcon('icon-pencil','w-5 h-5 text-primary'));</script>
+        </label>
+        <input type="file" id="perfil-file" class="hidden" accept="image/*">
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,22 @@
+{
+  "name": "LAÇOS - Cuidado Conectado",
+  "short_name": "LAÇOS",
+  "description": "Plataforma para conectar clientes e cuidadores.",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F3F4F6",
+  "theme_color": "#2563EB",
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
